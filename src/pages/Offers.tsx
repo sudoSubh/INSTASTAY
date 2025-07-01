@@ -388,7 +388,7 @@ const Offers = () => {
                     className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-3 rounded-xl transition-all duration-300"
                     onClick={() => handleOfferClick(offer)}
                   >
-                    <Tag className="w-4 w-4 mr-2" />
+                    <Tag className="w-4 mr-2" />
                     Use This Offer
                   </Button>
                 </CardContent>
