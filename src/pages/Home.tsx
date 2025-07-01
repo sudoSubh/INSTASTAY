@@ -65,13 +65,13 @@ const Home = () => {
     { 
       name: "Delhi", 
       hotels: "800+ properties", 
-      image: "https://images.unsplash.com/photo-1562930381-8b90a25b6b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       description: "Rich heritage meets modern luxury"
     },
     { 
       name: "Bangalore", 
       hotels: "600+ properties", 
-      image: "https://images.unsplash.com/photo-1596176530529-78163d6f9a8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://www.birlatrimayaa.in/images/birla/about-bangalore.webp",
       description: "Silicon Valley of India"
     },
     { 
