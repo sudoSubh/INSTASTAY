@@ -113,21 +113,23 @@ const Navigation = () => {
           size="sm"
           className={`
             lg:hidden relative p-2 rounded-full transition-all duration-300 transform hover:scale-110
+            flex items-center justify-center
             ${isMenuOpen ? 'bg-purple-100 text-purple-600' : 'hover:bg-purple-50'}
           `}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          <div className="relative w-6 h-6">
+          <div className="relative w-5 h-5 flex items-center justify-center">
             <Menu className={`
-              absolute inset-0 w-5 h-5 transition-all duration-300 
+              absolute inset-0 w-4 h-4 transition-all duration-300 
               ${isMenuOpen ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'}
             `} />
             <X className={`
-              absolute inset-0 w-5 h-5 transition-all duration-300
+              absolute inset-0 w-4 h-4 transition-all duration-300
               ${isMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'}
             `} />
           </div>
         </Button>
+
 
         {/* Login Button */}
         <Button
