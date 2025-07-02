@@ -135,7 +135,7 @@ const Help = () => {
       title: "Calling Support",
       description: "Redirecting to phone dialer...",
     });
-    window.open("tel:+919876543210", "_self");
+    window.open("tel:+916371933473", "_self");
   };
 
   const handleEmailSupport = () => {
