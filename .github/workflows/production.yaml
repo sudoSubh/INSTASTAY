@@ -1,7 +1,7 @@
 name: Vercel Production Deployment
 env:
-  VERCEL_ORG_ID: https://vercel.com/sudosubh's projects
-  VERCEL_PROJECT_ID: https://vercel.com/sudosubh's projects/instastay
+  VERCEL_ORG_ID: team_bA5WvXAPluz0siFrQCnjwHbk
+  VERCEL_PROJECT_ID: prj_1Ehns8w2yauEd2wlpRwIvmzrKu8g
 on:
   push:
     branches:
