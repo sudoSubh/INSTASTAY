@@ -224,53 +224,6 @@ const Home = () => {
         </motion.div>
       </div>
 
-      {/* Features Section */}
-      <div className="container mx-auto px-4 py-32">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
-          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-indigo-100 to-purple-100 px-6 py-3 rounded-full mb-8">
-            <Award className="w-5 h-5 text-indigo-600" />
-            <span className="font-semibold text-indigo-700">Why Choose INSTASTAY</span>
-          </div>
-          <h2 className="text-5xl font-bold text-gray-900 mb-8">Unmatched Excellence</h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Experience unparalleled hospitality with our curated collection of premium properties and world-class service standards
-          </p>
-        </motion.div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.2 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -10 }}
-              className="group"
-            >
-              <Card className="text-center hover:shadow-2xl transition-all duration-500 border-0 shadow-lg bg-gradient-to-br from-white to-gray-50 h-full">
-                <CardContent className="p-12">
-                  <motion.div
-                    className={`bg-gradient-to-br ${feature.color} w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300`}
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.6 }}
-                  >
-                    <feature.icon className="h-12 w-12 text-white" />
-                  </motion.div>
-                  <h3 className="text-2xl font-bold mb-6 text-gray-900">{feature.title}</h3>
-                  <p className="text-gray-600 leading-relaxed text-lg">{feature.description}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </div>
 
       {/* Popular Destinations */}
       <div className="bg-gradient-to-br from-gray-50 to-blue-50 py-32">
@@ -339,6 +292,54 @@ const Home = () => {
         <FeaturedHotels />
       </motion.div>
 
+{/* Features Section */}
+      <div className="container mx-auto px-4 py-32">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-20"
+        >
+          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-indigo-100 to-purple-100 px-6 py-3 rounded-full mb-8">
+            <Award className="w-5 h-5 text-indigo-600" />
+            <span className="font-semibold text-indigo-700">Why Choose INSTASTAY</span>
+          </div>
+          <h2 className="text-5xl font-bold text-gray-900 mb-8">Unmatched Excellence</h2>
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+            Experience unparalleled hospitality with our curated collection of premium properties and world-class service standards
+          </p>
+        </motion.div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: index * 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -10 }}
+              className="group"
+            >
+              <Card className="text-center hover:shadow-2xl transition-all duration-500 border-0 shadow-lg bg-gradient-to-br from-white to-gray-50 h-full">
+                <CardContent className="p-12">
+                  <motion.div
+                    className={`bg-gradient-to-br ${feature.color} w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300`}
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <feature.icon className="h-12 w-12 text-white" />
+                  </motion.div>
+                  <h3 className="text-2xl font-bold mb-6 text-gray-900">{feature.title}</h3>
+                  <p className="text-gray-600 leading-relaxed text-lg">{feature.description}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+      
       {/* CTA Section */}
       <div className="relative overflow-hidden">
         <AnimatedBackground className="py-32">
