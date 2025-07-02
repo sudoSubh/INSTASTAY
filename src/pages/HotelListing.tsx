@@ -40,6 +40,7 @@ const HotelListing = () => {
   const [sortBy, setSortBy] = useState('popular');
   const [showFilters, setShowFilters] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery)
 
   // Extract search parameters
   const checkIn = searchParams.get('checkIn');
@@ -114,8 +115,19 @@ const HotelListing = () => {
   }, []);
 
   useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
+
+  useEffect(() => {
     applyFilters();
-  }, [hotels, searchQuery, priceRange, selectedRating, selectedAmenities, sortBy]);
+  }, [hotels,debouncedSearchQuery, priceRange, selectedRating, selectedAmenities, sortBy]);
 
   const fetchHotels = async () => {
     try {
@@ -142,10 +154,10 @@ const HotelListing = () => {
     let filtered = [...hotels];
 
     // Location search
-    if (searchQuery) {
+    if (debouncedSearchQuery) {
       filtered = filtered.filter(hotel =>
-        hotel.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        hotel.name.toLowerCase().includes(searchQuery.toLowerCase())
+        hotel.location.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        hotel.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
       );
     }
 
@@ -253,7 +265,7 @@ const HotelListing = () => {
               <button
                 type="button"
                 onClick={handleVoiceSearch}
-                className={`absolute right-3 top-3 p-2 rounded-full transition-all duration-300 z-10 border-2 ${
+                className={`absolute right-3 top-1 p-2 rounded-full transition-all duration-300 z-10 border-2 ${
                   isListening 
                     ? 'text-red-500 bg-red-50 border-red-200 animate-pulse shadow-lg scale-110' 
                     : 'text-purple-600 bg-purple-50 border-purple-200 hover:bg-purple-100 hover:border-purple-300 shadow-md hover:scale-105'
