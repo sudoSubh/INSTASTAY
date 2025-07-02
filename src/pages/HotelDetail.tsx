@@ -589,7 +589,7 @@ const HotelDetail = () => {
                 <div className="space-y-3">
                   <div className="flex items-center">
                     <Phone className="h-4 w-4 text-gray-400 mr-3" />
-                    <span className="text-sm text-gray-600">+91 98765 43210</span>
+                    <span className="text-sm text-gray-600">+91 63719 33473</span>
                   </div>
                   <div className="flex items-center">
                     <Mail className="h-4 w-4 text-gray-400 mr-3" />

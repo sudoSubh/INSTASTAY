@@ -208,7 +208,7 @@ const Help = () => {
                 </div>
                 <h3 className="text-2xl font-bold mb-3 text-gray-900">Call Us</h3>
                 <p className="text-gray-600 mb-4">24/7 Expert Support</p>
-                <p className="font-bold text-xl text-green-600 mb-6">+91 98765 43210</p>
+                <p className="font-bold text-xl text-green-600 mb-6">+91 63719 33473</p>
                 <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                   <Phone className="h-5 w-5 mr-2" />
                   Call Now
