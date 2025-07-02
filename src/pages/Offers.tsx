@@ -80,7 +80,7 @@ const Offers = () => {
       validUntil: "2024-08-15",
       code: "EARLY50",
       category: "early-bird",
-      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1661016630713-67e36bfc2285?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG90ZWwlMjBvdXRzaWRlfGVufDB8fDB8fHww?w=800&h=600&fit=crop",
       terms: ["Book 30 days in advance", "Valid for select properties", "Non-refundable booking"],
       featured: true
     },
@@ -412,7 +412,7 @@ const Offers = () => {
         )}
 
         {/* Newsletter Signup */}
-        <div className="mt-20 bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 rounded-3xl p-12 text-center text-white">
+        <div className="mt-20 bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-500 rounded-3xl p-12 text-center text-white">
           <Sparkles className="w-16 h-16 mx-auto mb-6 opacity-80" />
           <h2 className="text-3xl font-bold mb-4">Never Miss a Deal</h2>
           <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
@@ -420,7 +420,7 @@ const Offers = () => {
           </p>
           <Button 
             size="lg"
-            className="bg-white text-indigo-600 hover:bg-gray-100 font-semibold px-10 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+            className="bg-white text-indigo-200 hover:bg-gray-100 font-semibold px-10 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
           >
             Subscribe Now
           </Button>
