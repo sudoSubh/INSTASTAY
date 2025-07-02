@@ -120,7 +120,7 @@ const AIAssistant = () => {
       <>
         {/* AI Chat Bubble */}
         <div className="fixed bottom-6 right-6 z-50">
-          <div className="bg-white rounded-full shadow-lg border border-gray-200 p-4 relative animate-bounce">
+          <div className="bg-white rounded-full shadow-lg border border-gray-200 p-4 relative animate-bounce-slow">
             <button
               type="button"
               onClick={() => setIsOpen(true)}
