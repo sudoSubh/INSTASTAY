@@ -83,65 +83,67 @@ const Header = () => {
       }
     }
   };
+return (
+  <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+    <div className="container mx-auto px-2 sm:px-6">
+      <div className="flex items-center justify-between h-14 sm:h-16">
 
-  return (
-    <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
-      <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-
-          {/* Left: Logo & brand */}
-          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => navigate('/')}>
-            <img 
-              src="/logo.png" 
-              alt="InstaStay Logo" 
-              className="h-10 w-10 object-contain rounded  -ml-12 " 
-            />
-            <div 
-              className=" bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg font-bold text-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-            >
-              INSTASTAY
-            </div>
-            <div className="hidden sm:block">
-              <h1 className="text-lg font-semibold text-gray-900">Premium Hotels</h1>
-              <p className="text-sm text-gray-500">Experience luxury stays</p>
-            </div>
+        {/* Left: Logo & brand */}
+        <div className="flex items-center space-x-1 sm:space-x-3 cursor-pointer" onClick={() => navigate('/')}>
+          <img 
+            src="/logo.png" 
+            alt="InstaStay Logo" 
+            className="h-8 w-8 sm:h-10 sm:w-10 object-contain rounded ml-0 sm:-ml-12" 
+          />
+          <div 
+            className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 rounded-md sm:rounded-lg font-semibold sm:font-bold text-base sm:text-xl shadow-md sm:shadow-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+          >
+            INSTASTAY
           </div>
-
-          {/* Middle: Centered navigation */}
-          <div className="flex-1 flex justify-center">
-            <Navigation />
+          <div className="hidden sm:block">
+            <h1 className="text-lg font-semibold text-gray-900">Premium Hotels</h1>
+            <p className="text-sm text-gray-500">Experience luxury stays</p>
           </div>
+        </div>
 
-          {/* Right: Voice search icon or empty for now */}
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={handleVoiceSearch}
-              className={`p-2 rounded-full transition-all duration-300 border-2 z-20 ${
-                isListening 
-                  ? 'text-red-500 bg-red-50 border-red-200 animate-pulse shadow-lg scale-110' 
-                  : 'text-purple-600 bg-purple-50 border-purple-200 hover:bg-purple-100 hover:border-purple-300 shadow-md hover:scale-105'
-              }`}
-              title={isListening ? "Stop listening" : "Voice search"}
-            >
-              {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
-            </button>
-          </div>
+        {/* Middle: Centered navigation */}
+        <div className="flex-1 flex justify-center">
+          <Navigation />
+        </div>
+
+        {/* Right: Voice search icon */}
+        <div className="flex items-center space-x-2 sm:space-x-4 pr-2 sm:pr-0">
+          <button
+            onClick={handleVoiceSearch}
+            className={`p-1.5 sm:p-2 rounded-full transition-all duration-300 border-2 z-20 ${
+              isListening 
+                ? 'text-red-500 bg-red-50 border-red-200 animate-pulse shadow-md sm:shadow-lg scale-105 sm:scale-110' 
+                : 'text-purple-600 bg-purple-50 border-purple-200 hover:bg-purple-100 hover:border-purple-300 shadow-sm sm:shadow-md hover:scale-105'
+            }`}
+            title={isListening ? "Stop listening" : "Voice search"}
+          >
+            {isListening 
+              ? <MicOff className="h-4 w-4 sm:h-5 sm:w-5" /> 
+              : <Mic className="h-4 w-4 sm:h-5 sm:w-5" />}
+          </button>
         </div>
       </div>
+    </div>
 
-      {/* Voice listening banner */}
-      {isListening && (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-pulse">
-          <div className="flex items-center space-x-2">
-            <Mic className="h-5 w-5" />
-            <span className="text-sm font-medium">Listening... Speak now</span>
-          </div>
+    {/* Voice listening banner */}
+    {isListening && (
+      <div className="fixed top-16 sm:top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full shadow-md sm:shadow-lg z-50 animate-pulse">
+        <div className="flex items-center space-x-1 sm:space-x-2">
+          <Mic className="h-4 w-4 sm:h-5 sm:w-5" />
+          <span className="text-xs sm:text-sm font-medium">Listening... Speak now</span>
         </div>
-      )}
+      </div>
+    )}
 
-      <AIAssistant />
-    </header>
-  );
+    <AIAssistant />
+  </header>
+);
+
 };
 
 export default Header;
