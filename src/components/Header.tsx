@@ -101,7 +101,7 @@ const Header = () => {
             >
               INSTASTAY
             </div>
-            <div>
+            <div className="hidden sm:block">
               <h1 className="text-lg font-semibold text-gray-900">Premium Hotels</h1>
               <p className="text-sm text-gray-500">Experience luxury stays</p>
             </div>
