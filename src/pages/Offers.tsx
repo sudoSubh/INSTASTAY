@@ -333,7 +333,7 @@ const Offers = () => {
           {filteredOffers.map((offer) => {
             const CategoryIcon = getCategoryIcon(offer.category);
             return (
-              <Card key={offer.id} className="overflow-hidden shadow-lg border-0 bg-white hover:shadow-2xl transition-all duration-300 group cursor-pointer flex flex-col h-full">
+              <Card key={offer.id} className="flex flex-col h-full overflow-hidden shadow-lg border-0 bg-white hover:shadow-2xl transition-all duration-300 group cursor-pointer">
                 <div className="relative">
                   <img
                     src={offer.image}
@@ -359,42 +359,40 @@ const Offers = () => {
                     </div>
                   )}
                 </div>
-                <CardContent className="p-6 flex flex-col flex-grow">
-                  <div className="flex-grow">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{offer.title}</h3>
-                    <p className="text-gray-600 mb-4 leading-relaxed">{offer.description}</p>
-                    
-                    <div className="space-y-3 mb-6">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-500">Code:</span>
-                        <Badge variant="outline" className="font-mono font-bold">{offer.code}</Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-500">Valid Until:</span>
-                        <span className="text-sm font-semibold">{offer.validUntil}</span>
-                      </div>
-                      {offer.minStay && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-500">Min Stay:</span>
-                          <span className="text-sm font-semibold">{offer.minStay} nights</span>
-                        </div>
-                      )}
-                      {offer.locations && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-500">Locations:</span>
-                          <span className="text-sm font-semibold">{offer.locations.join(", ")}</span>
-                        </div>
-                      )}
+                <CardContent className="flex flex-col flex-grow p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{offer.title}</h3>
+                  <p className="text-gray-600 mb-4 leading-relaxed">{offer.description}</p>
+                  <div className="space-y-3 mb-6">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">Code:</span>
+                      <Badge variant="outline" className="font-mono font-bold">{offer.code}</Badge>
                     </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">Valid Until:</span>
+                      <span className="text-sm font-semibold">{offer.validUntil}</span>
+                    </div>
+                    {offer.minStay && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-500">Min Stay:</span>
+                        <span className="text-sm font-semibold">{offer.minStay} nights</span>
+                      </div>
+                    )}
+                    {offer.locations && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-500">Locations:</span>
+                        <span className="text-sm font-semibold">{offer.locations.join(", ")}</span>
+                      </div>
+                    )}
                   </div>
-
-                  <Button 
-                    className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 mt-auto"
-                    onClick={() => handleOfferClick(offer)}
-                  >
-                    <Tag className="w-4 mr-2" />
-                    Use This Offer
-                  </Button>
+                  <div className="mt-auto flex justify-center">
+                    <Button 
+                      className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 px-8"
+                      onClick={() => handleOfferClick(offer)}
+                    >
+                      <Tag className="w-4 mr-2" />
+                      Use This Offer
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             );
@@ -425,6 +423,12 @@ const Offers = () => {
           <Button 
             size="lg"
             className="bg-white text-indigo-200 hover:bg-gray-100 font-semibold px-10 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+            onClick={() => {
+              toast({
+                title: "Subscribed!",
+                description: "You have successfully subscribed to our newsletter.",
+              });
+            }}
           >
             Subscribe Now
           </Button>
