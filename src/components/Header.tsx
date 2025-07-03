@@ -11,6 +11,9 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
+  const [showHeader, setShowHeader] = useState(true);
+  const lastScrollY = useRef(0);
+
 
   // Speech recognition
   useEffect(() => {
@@ -40,6 +43,26 @@ const Header = () => {
       recognitionRef.current.onend = () => setIsListening(false);
     }
   }, []);
+  useEffect(() => {
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+      setShowHeader(false); // Scrolling down
+    } else if (currentScrollY < lastScrollY.current - 10) {
+      setShowHeader(true); // Scrolling up a bit
+    }
+
+    lastScrollY.current = currentScrollY;
+  };
+
+  window.addEventListener("scroll", handleScroll);
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, []);
+
 
   const handleSearch = (query: string = searchQuery) => {
     if (!query.trim()) {
@@ -84,7 +107,9 @@ const Header = () => {
     }
   };
 return (
-  <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+  <>
+  <header className={`bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40 transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'}`}>
+
     <div className="container mx-auto px-2 sm:px-6">
       <div className="flex items-center justify-between h-14 sm:h-16">
 
@@ -140,8 +165,9 @@ return (
       </div>
     )}
 
-    <AIAssistant />
   </header>
+    <AIAssistant />
+  </>
 );
 
 };

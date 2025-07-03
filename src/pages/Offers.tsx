@@ -256,7 +256,7 @@ const Offers = () => {
               {featuredOffers.map((offer) => {
                 const CategoryIcon = getCategoryIcon(offer.category);
                 return (
-                  <Card key={offer.id} className="overflow-hidden shadow-xl border-0 bg-gradient-to-br from-white to-gray-50 transform hover:scale-105 transition-all duration-300 cursor-pointer">
+                  <Card key={offer.id} className="overflow-hidden shadow-xl border-0 bg-gradient-to-br from-white to-gray-50 transform hover:scale-105 transition-all duration-300 cursor-pointer flex flex-col h-full">
                     <div className="relative">
                       <img
                         src={offer.image}
@@ -274,23 +274,25 @@ const Offers = () => {
                         </div>
                       </div>
                     </div>
-                    <CardContent className="p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">{offer.title}</h3>
-                      <p className="text-gray-600 mb-4 leading-relaxed">{offer.description}</p>
-                      
-                      <div className="space-y-3 mb-6">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-500">Promo Code:</span>
-                          <Badge variant="outline" className="font-mono font-bold">{offer.code}</Badge>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-500">Valid Until:</span>
-                          <span className="text-sm font-semibold text-gray-900">{offer.validUntil}</span>
+                    <CardContent className="p-6 flex flex-col flex-grow">
+                      <div className="flex-grow">
+                        <h3 className="text-xl font-bold text-gray-900 mb-3">{offer.title}</h3>
+                        <p className="text-gray-600 mb-4 leading-relaxed">{offer.description}</p>
+                        
+                        <div className="space-y-3 mb-6">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-500">Promo Code:</span>
+                            <Badge variant="outline" className="font-mono font-bold">{offer.code}</Badge>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-500">Valid Until:</span>
+                            <span className="text-sm font-semibold text-gray-900">{offer.validUntil}</span>
+                          </div>
                         </div>
                       </div>
 
                       <Button 
-                        className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                        className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mt-auto"
                         onClick={() => handleOfferClick(offer)}
                       >
                         <Gift className="w-4 h-4 mr-2" />
@@ -331,7 +333,7 @@ const Offers = () => {
           {filteredOffers.map((offer) => {
             const CategoryIcon = getCategoryIcon(offer.category);
             return (
-              <Card key={offer.id} className="overflow-hidden shadow-lg border-0 bg-white hover:shadow-2xl transition-all duration-300 group cursor-pointer">
+              <Card key={offer.id} className="overflow-hidden shadow-lg border-0 bg-white hover:shadow-2xl transition-all duration-300 group cursor-pointer flex flex-col h-full">
                 <div className="relative">
                   <img
                     src={offer.image}
@@ -357,35 +359,37 @@ const Offers = () => {
                     </div>
                   )}
                 </div>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{offer.title}</h3>
-                  <p className="text-gray-600 mb-4 leading-relaxed">{offer.description}</p>
-                  
-                  <div className="space-y-3 mb-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Code:</span>
-                      <Badge variant="outline" className="font-mono font-bold">{offer.code}</Badge>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Valid Until:</span>
-                      <span className="text-sm font-semibold">{offer.validUntil}</span>
-                    </div>
-                    {offer.minStay && (
+                <CardContent className="p-6 flex flex-col flex-grow">
+                  <div className="flex-grow">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{offer.title}</h3>
+                    <p className="text-gray-600 mb-4 leading-relaxed">{offer.description}</p>
+                    
+                    <div className="space-y-3 mb-6">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-500">Min Stay:</span>
-                        <span className="text-sm font-semibold">{offer.minStay} nights</span>
+                        <span className="text-sm text-gray-500">Code:</span>
+                        <Badge variant="outline" className="font-mono font-bold">{offer.code}</Badge>
                       </div>
-                    )}
-                    {offer.locations && (
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-500">Locations:</span>
-                        <span className="text-sm font-semibold">{offer.locations.join(", ")}</span>
+                        <span className="text-sm text-gray-500">Valid Until:</span>
+                        <span className="text-sm font-semibold">{offer.validUntil}</span>
                       </div>
-                    )}
+                      {offer.minStay && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-500">Min Stay:</span>
+                          <span className="text-sm font-semibold">{offer.minStay} nights</span>
+                        </div>
+                      )}
+                      {offer.locations && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-500">Locations:</span>
+                          <span className="text-sm font-semibold">{offer.locations.join(", ")}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <Button 
-                    className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-3 rounded-xl transition-all duration-300"
+                    className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 mt-auto"
                     onClick={() => handleOfferClick(offer)}
                   >
                     <Tag className="w-4 mr-2" />
