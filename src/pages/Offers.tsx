@@ -74,7 +74,7 @@ const Offers = () => {
     },
     {
       id: "2",
-      title: "Early Bird Special",
+      title: "Early Bird Special Prateek vercel deploy karti paruni",
       description: "Book 30 days in advance and enjoy massive savings on premium properties",
       discount: 50,
       validUntil: "2024-08-15",
