@@ -292,7 +292,7 @@ const Offers = () => {
                       </div>
 
                       <Button 
-                        className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mt-auto"
+                        className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mt-auto px-4"
                         onClick={() => handleOfferClick(offer)}
                       >
                         <Gift className="w-4 h-4 mr-2" />
@@ -386,7 +386,7 @@ const Offers = () => {
                   </div>
                   <div className="mt-auto flex justify-center">
                     <Button 
-                      className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 px-8"
+                      className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 px-4"
                       onClick={() => handleOfferClick(offer)}
                     >
                       <Tag className="w-4 mr-2" />
