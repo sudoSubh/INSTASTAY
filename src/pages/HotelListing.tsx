@@ -324,8 +324,8 @@ const HotelListing = () => {
                     max={10000}
                     min={0}
                     step={500}
-                    className="w-full"
-                  />
+                    className="w-full custom-slider"
+                    />
                 </div>
 
                 {/* Rating Filter */}
@@ -336,7 +336,7 @@ const HotelListing = () => {
                       <SelectValue placeholder="Any rating" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Any rating</SelectItem>
+                      <SelectItem value="any">Any rating</SelectItem>
                       <SelectItem value="4">4+ Stars</SelectItem>
                       <SelectItem value="3.5">3.5+ Stars</SelectItem>
                       <SelectItem value="3">3+ Stars</SelectItem>
