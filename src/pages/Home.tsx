@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, MapPin, Calendar, Users, Star, Heart, Zap, Shield, Award, Clock, ArrowRight, Sparkles } from "lucide-react";
+import { Search, MapPin, Heart, ArrowRight, Sparkles, Zap, Award, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,7 @@ import { FloatingCard } from "@/components/ui/floating-card";
 import { AnimatedText } from "@/components/ui/animated-text";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { ParticleBackground } from "@/components/ui/particle-background";
+import { features, destinations, stats } from "@/data/homeData";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -34,65 +35,13 @@ const Home = () => {
     navigate(`/hotels?location=${location}`);
   };
 
-  const features = [
-    {
-      icon: Award,
-      title: "Premium Quality Guarantee",
-      description: "Handpicked properties ensuring the highest standards of comfort and service",
-      color: "from-yellow-400 to-orange-500"
-    },
-    {
-      icon: Shield,
-      title: "Secure & Trusted Booking",
-      description: "Your personal and payment information is protected with enterprise-grade security",
-      color: "from-green-400 to-emerald-500"
-    },
-    {
-      icon: Clock,
-      title: "Instant Confirmation",
-      description: "Book instantly with immediate confirmation and seamless mobile check-in experience",
-      color: "from-blue-400 to-indigo-500"
-    }
-  ];
 
-  const destinations = [
-    { 
-      name: "Mumbai", 
-      hotels: "500+ properties", 
-      image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      description: "Financial capital with stunning skylines"
-    },
-    { 
-      name: "Delhi", 
-      hotels: "800+ properties", 
-      image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      description: "Rich heritage meets modern luxury"
-    },
-    { 
-      name: "Bangalore", 
-      hotels: "600+ properties", 
-      image: "https://www.birlatrimayaa.in/images/birla/about-bangalore.webp",
-      description: "Silicon Valley of India"
-    },
-    { 
-      name: "Goa", 
-      hotels: "300+ properties", 
-      image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      description: "Tropical paradise with golden beaches"
-    }
-  ];
-
-  const stats = [
-    { number: "43,000+", label: "Premium Hotels", icon: Award },
-    { number: "1000+", label: "Cities", icon: MapPin },
-    { number: "173M+", label: "Happy Guests", icon: Heart }
-  ];
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
       <Header />
       
-      {/* Hero Section */}
+              {/* Hero */}
       <AnimatedBackground className="relative text-white min-h-screen flex items-center justify-center">
         <ParticleBackground />
         
@@ -154,7 +103,7 @@ const Home = () => {
               ))}
             </motion.div>
             
-            {/* Quick Search Bar */}
+            {/* Search bar */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -183,7 +132,7 @@ const Home = () => {
               </FloatingCard>
             </motion.div>
 
-            {/* CTA Buttons */}
+            {/* CTA */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -212,7 +161,7 @@ const Home = () => {
         </div>
       </AnimatedBackground>
 
-      {/* Search Form Section */}
+              {/* Search form */}
       <div className="container mx-auto px-4 -mt-16 relative z-30">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -225,7 +174,7 @@ const Home = () => {
       </div>
 
 
-      {/* Popular Destinations */}
+              {/* Destinations */}
       <div className="bg-gradient-to-br from-gray-50 to-blue-50 py-32">
         <div className="container mx-auto px-4">
           <motion.div
@@ -282,7 +231,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Featured Hotels Section */}
+              {/* Hotels */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -292,7 +241,7 @@ const Home = () => {
         <FeaturedHotels />
       </motion.div>
 
-{/* Features Section */}
+        {/* Features */}
       <div className="container mx-auto px-4 py-32">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -340,7 +289,7 @@ const Home = () => {
         </div>
       </div>
       
-      {/* CTA Section */}
+              {/* CTA */}
       <div className="relative overflow-hidden">
         <AnimatedBackground className="py-32">
           <ParticleBackground />

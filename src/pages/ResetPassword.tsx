@@ -23,12 +23,11 @@ const ResetPassword = () => {
   });
 
   useEffect(() => {
-    // Check if we have the required tokens from the URL
     const accessToken = searchParams.get('access_token');
     const refreshToken = searchParams.get('refresh_token');
     
     if (accessToken && refreshToken) {
-      // Set the session with the tokens from URL
+      // Set session
       supabase.auth.setSession({
         access_token: accessToken,
         refresh_token: refreshToken
@@ -79,7 +78,6 @@ const ResetPassword = () => {
         description: "Your password has been successfully updated.",
       });
 
-      // Redirect to login after 3 seconds
       setTimeout(() => {
         navigate("/login");
       }, 3000);

@@ -74,7 +74,6 @@ const HotelDetail = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   
-  // Date selection states
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(
     searchParams.get('checkIn') ? new Date(searchParams.get('checkIn')!) : undefined
   );
@@ -180,12 +179,10 @@ const HotelDetail = () => {
     if (date) {
       setCheckInDate(date);
       
-      // If check-out is before or same as check-in, clear it
       if (checkOutDate && date >= checkOutDate) {
         setCheckOutDate(undefined);
       }
       
-      // Update URL params
       const newParams = new URLSearchParams(searchParams);
       newParams.set('checkIn', format(date, 'yyyy-MM-dd'));
       if (checkOutDate && date < checkOutDate) {
@@ -202,7 +199,6 @@ const HotelDetail = () => {
     if (date) {
       setCheckOutDate(date);
       
-      // Update URL params
       const newParams = new URLSearchParams(searchParams);
       newParams.set('checkOut', format(date, 'yyyy-MM-dd'));
       if (checkInDate) {
@@ -319,7 +315,7 @@ const HotelDetail = () => {
       <Header />
       
       <div className="container mx-auto px-4 py-8">
-        {/* Image Gallery */}
+        {/* Gallery */}
         <div className="relative mb-8">
           <div className="relative h-64 md:h-96 rounded-xl overflow-hidden">
             <img
@@ -380,9 +376,9 @@ const HotelDetail = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
+          {/* Main */}
           <div className="lg:col-span-2">
-            {/* Hotel Info */}
+                          {/* Info */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{hotel.name}</h1>
               <div className="flex items-center text-gray-600 mb-4">
@@ -418,7 +414,7 @@ const HotelDetail = () => {
               </CardContent>
             </Card>
 
-            {/* Reviews Section */}
+                          {/* Reviews */}
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-6">
@@ -465,7 +461,7 @@ const HotelDetail = () => {
             </Card>
           </div>
 
-          {/* Booking Card */}
+                      {/* Booking */}
           <div className="lg:col-span-1">
             <Card className="sticky top-8">
               <CardContent className="p-6">
@@ -602,7 +598,7 @@ const HotelDetail = () => {
         </div>
       </div>
 
-      {/* Write Review Modal */}
+              {/* Review modal */}
       <WriteReviewModal
         isOpen={showReviewModal}
         onClose={() => setShowReviewModal(false)}

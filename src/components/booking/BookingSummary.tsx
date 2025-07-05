@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Users, MapPin, Tag } from "lucide-react";
+import { formatPrice, calculateNights } from "@/utils/helpers";
 
 interface BookingSummaryProps {
   hotel: any;
@@ -18,16 +19,14 @@ const BookingSummary = ({ hotel, bookingData, calculateTotal, appliedCoupon, cou
       return { nights: 0, basePrice: 0, discountAmount: 0, taxes: 0, total: 0 };
     }
     
-    const checkIn = new Date(bookingData.checkIn);
-    const checkOut = new Date(bookingData.checkOut);
-    const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+    const nights = calculateNights(bookingData.checkIn, bookingData.checkOut);
     
     if (nights <= 0) return { nights: 0, basePrice: 0, discountAmount: 0, taxes: 0, total: 0 };
     
     const basePrice = hotel.price * nights * parseInt(bookingData.guests || '1');
     const discountAmount = basePrice * ((couponDiscount || 0) / 100);
     const discountedPrice = basePrice - discountAmount;
-    const taxes = discountedPrice * 0.18; // 18% tax
+    const taxes = discountedPrice * 0.18;
     const total = Math.round(discountedPrice + taxes);
     
     return { nights, basePrice, discountAmount, taxes, total };
@@ -84,7 +83,7 @@ const BookingSummary = ({ hotel, bookingData, calculateTotal, appliedCoupon, cou
 
         <Separator className="mb-6" />
 
-        {/* Price Breakdown */}
+        {/* Price */}
         <div className="space-y-3 mb-6">
           <h4 className="font-semibold text-gray-900">Price Breakdown</h4>
           
@@ -94,7 +93,7 @@ const BookingSummary = ({ hotel, bookingData, calculateTotal, appliedCoupon, cou
                 <span className="text-sm text-gray-600">
                   ₹{hotel.price} × {nights} nights × {bookingData.guests} guests
                 </span>
-                <span className="text-sm font-medium">₹{basePrice.toLocaleString()}</span>
+                <span className="text-sm font-medium">{formatPrice(basePrice)}</span>
               </div>
               
               {appliedCoupon && couponDiscount && discountAmount > 0 && (
@@ -103,13 +102,13 @@ const BookingSummary = ({ hotel, bookingData, calculateTotal, appliedCoupon, cou
                     <Tag className="h-3 w-3 mr-1" />
                     <span className="text-sm">Coupon ({appliedCoupon})</span>
                   </div>
-                  <span className="text-sm font-medium">-₹{discountAmount.toLocaleString()}</span>
+                  <span className="text-sm font-medium">-{formatPrice(discountAmount)}</span>
                 </div>
               )}
               
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Taxes & fees (18%)</span>
-                <span className="text-sm font-medium">₹{taxes.toLocaleString()}</span>
+                <span className="text-sm font-medium">{formatPrice(taxes)}</span>
               </div>
             </>
           )}
@@ -119,7 +118,7 @@ const BookingSummary = ({ hotel, bookingData, calculateTotal, appliedCoupon, cou
 
         <div className="flex items-center justify-between mb-6">
           <span className="text-lg font-bold text-gray-900">Total</span>
-          <span className="text-2xl font-bold text-red-600">₹{calculateTotal().toLocaleString()}</span>
+          <span className="text-2xl font-bold text-red-600">{formatPrice(calculateTotal())}</span>
         </div>
 
         {appliedCoupon && (

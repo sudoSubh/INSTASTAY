@@ -31,11 +31,10 @@ const AIAssistant = () => {
   const [expandedMessages, setExpandedMessages] = useState<string[]>([]);
   const [expanded, setExpanded] = useState(false);
 
-  // Fetch and summarize backend data for AI context
   const fetchBackendSummary = async () => {
     try {
       const hotels = await HotelService.getAllHotels();
-      // Summarize hotels (limit to 3 for brevity)
+              // Limit hotels
       const hotelSummaries = hotels.slice(0, 3).map(hotel =>
         `- ${hotel.name} in ${hotel.location}: ₹${hotel.price}/night, Amenities: ${hotel.amenities.join(", ")}`
       ).join("\n");
@@ -52,7 +51,6 @@ const AIAssistant = () => {
     }
   };
 
-  // Fetch AI response from local backend proxy (handles API key and CORS)
   const fetchAIResponse = async (userInput: string, backendSummary: string): Promise<string> => {
     try {
       const response = await fetch('https://proxyserver-three.vercel.app/api/ai-chat', {
@@ -84,7 +82,6 @@ const AIAssistant = () => {
     }
   };
 
-  // Send user message and get AI response
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
 
@@ -99,10 +96,9 @@ const AIAssistant = () => {
     setInputMessage('');
     setIsLoading(true);
 
-    // Fetch backend summary for context
-    const backendSummary = await fetchBackendSummary();
-
-    // Call OpenRouter API for AI response
+                const backendSummary = await fetchBackendSummary();
+    
+    // Call API
     const aiContent = await fetchAIResponse(inputMessage, backendSummary);
 
     const aiResponse: Message = {
@@ -118,7 +114,7 @@ const AIAssistant = () => {
   if (!isOpen) {
     return (
       <>
-        {/* AI Chat Bubble */}
+        {/* Chat */}
         <div className="fixed bottom-6 right-6 z-50">
           <div className="bg-white rounded-full shadow-lg border border-gray-200 p-4 relative animate-bounce-slow">
             <button

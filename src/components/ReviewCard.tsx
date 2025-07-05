@@ -48,7 +48,6 @@ const ReviewCard = ({ review, onHelpfulClick }: ReviewCardProps) => {
     });
   };
 
-  // Get initials from user name
   const getInitials = (userName?: string) => {
     if (userName && userName !== 'Anonymous User') {
       return userName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);

@@ -11,6 +11,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Header from "@/components/Header";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useHotelFilters } from "@/hooks/useHotelFilters";
+import { useVoiceSearch } from "@/hooks/useVoiceSearch";
 
 interface Hotel {
   id: string;
@@ -31,103 +33,41 @@ const HotelListing = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [hotels, setHotels] = useState<Hotel[]>([]);
-  const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('location') || '');
-  const [priceRange, setPriceRange] = useState([0, 10000]);
-  const [selectedRating, setSelectedRating] = useState('');
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState('popular');
   const [showFilters, setShowFilters] = useState(false);
-  const [isListening, setIsListening] = useState(false);
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery)
 
-  // Extract search parameters
   const checkIn = searchParams.get('checkIn');
   const checkOut = searchParams.get('checkOut');
   const guests = searchParams.get('guests');
+  const { 
+    filters, 
+    filteredHotels, 
+    updateFilter, 
+    resetFilters 
+  } = useHotelFilters(hotels);
+  
+  const { 
+    isListening, 
+    startVoiceSearch 
+  } = useVoiceSearch();
 
-  // Voice search functionality
   const handleVoiceSearch = () => {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      toast({
-        title: "Voice Search Not Supported",
-        description: "Your browser doesn't support voice recognition",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-    const recognition = new SpeechRecognition();
-    
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
-
-    recognition.onstart = () => {
-      setIsListening(true);
-      toast({
-        title: "Listening...",
-        description: "Speak now to search for hotels",
-      });
-    };
-
-    recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      setSearchQuery(transcript);
-      setIsListening(false);
-    };
-
-    recognition.onerror = (event: any) => {
-      console.error('Speech recognition error:', event.error);
-      setIsListening(false);
-      toast({
-        title: "Voice Recognition Error",
-        description: "Could not recognize speech. Please try again.",
-        variant: "destructive",
-      });
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
-
-    if (isListening) {
-      recognition.stop();
-      setIsListening(false);
-    } else {
-      try {
-        recognition.start();
-      } catch (error) {
-        console.error('Voice recognition start error:', error);
-        toast({
-          title: "Voice Search Error",
-          description: "Could not start voice recognition",
-          variant: "destructive",
-        });
-      }
-    }
+    startVoiceSearch((transcript) => {
+      const cleanedTranscript = transcript
+                  .replace(/[.,!?;:]/g, '') // Remove punct
+                  .replace(/\s+/g, ' ') // Fix spaces
+        .trim(); // Trim
+      updateFilter('searchQuery', cleanedTranscript);
+    });
   };
+
+
 
   useEffect(() => {
     fetchHotels();
   }, []);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchQuery(searchQuery);
-    }, 1000);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchQuery]);
-
-
-  useEffect(() => {
-    applyFilters();
-  }, [hotels,debouncedSearchQuery, priceRange, selectedRating, selectedAmenities, sortBy]);
 
   const fetchHotels = async () => {
     try {
@@ -150,56 +90,7 @@ const HotelListing = () => {
     }
   };
 
-  const applyFilters = () => {
-    let filtered = [...hotels];
 
-    // Location search
-    if (debouncedSearchQuery) {
-      filtered = filtered.filter(hotel =>
-        hotel.location.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
-        hotel.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
-      );
-    }
-
-    // Price range
-    filtered = filtered.filter(hotel => 
-      hotel.price >= priceRange[0] && hotel.price <= priceRange[1]
-    );
-
-    // Rating filter
-    if (selectedRating) {
-      const minRating = parseFloat(selectedRating);
-      filtered = filtered.filter(hotel => hotel.rating >= minRating);
-    }
-
-    // Amenities filter
-    if (selectedAmenities.length > 0) {
-      filtered = filtered.filter(hotel =>
-        selectedAmenities.every(amenity => hotel.amenities.includes(amenity))
-      );
-    }
-
-    // Sorting
-    switch (sortBy) {
-      case 'price-low':
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-high':
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case 'rating':
-        filtered.sort((a, b) => b.rating - a.rating);
-        break;
-      case 'reviews':
-        filtered.sort((a, b) => b.total_reviews - a.total_reviews);
-        break;
-      default:
-        // Popular (default order)
-        break;
-    }
-
-    setFilteredHotels(filtered);
-  };
 
   const handleHotelClick = (hotelId: string) => {
     const params = new URLSearchParams();
@@ -257,8 +148,8 @@ const HotelListing = () => {
               <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400 z-10" />
               <Input
                 placeholder="Search by location or hotel name..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={filters.searchQuery}
+                onChange={(e) => updateFilter('searchQuery', e.target.value)}
                 className="pl-10 pr-16 h-12"
               />
               {/* Voice Search Button - Made more visible */}
@@ -277,7 +168,7 @@ const HotelListing = () => {
             </div>
             
             <div className="flex items-center gap-3">
-              <Select value={sortBy} onValueChange={setSortBy}>
+              <Select value={filters.sortBy} onValueChange={(value) => updateFilter('sortBy', value)}>
                 <SelectTrigger className="w-40">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
@@ -301,13 +192,7 @@ const HotelListing = () => {
             </div>
           </div>
 
-          {/* Voice Recognition Status */}
-          {isListening && (
-            <div className="mt-4 flex items-center justify-center p-4 bg-red-50 border border-red-200 rounded-lg">
-              <Mic className="h-5 w-5 text-red-500 mr-2 animate-pulse" />
-              <span className="text-red-700 font-medium">Listening... Speak your search term</span>
-            </div>
-          )}
+
 
           {/* Advanced Filters */}
           {showFilters && (
@@ -316,11 +201,11 @@ const HotelListing = () => {
                 {/* Price Range */}
                 <div>
                   <label className="block text-sm font-medium mb-3">
-                    Price Range: ₹{priceRange[0]} - ₹{priceRange[1]}
+                    Price Range: ₹{filters.priceRange[0]} - ₹{filters.priceRange[1]}
                   </label>
                   <Slider
-                    value={priceRange}
-                    onValueChange={setPriceRange}
+                    value={filters.priceRange}
+                    onValueChange={(value) => updateFilter('priceRange', value as [number, number])}
                     max={10000}
                     min={0}
                     step={500}
@@ -331,7 +216,7 @@ const HotelListing = () => {
                 {/* Rating Filter */}
                 <div>
                   <label className="block text-sm font-medium mb-3">Minimum Rating</label>
-                  <Select value={selectedRating} onValueChange={setSelectedRating}>
+                  <Select value={filters.selectedRating} onValueChange={(value) => updateFilter('selectedRating', value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Any rating" />
                     </SelectTrigger>
@@ -352,12 +237,12 @@ const HotelListing = () => {
                       <div key={amenity} className="flex items-center space-x-2">
                         <Checkbox
                           id={amenity}
-                          checked={selectedAmenities.includes(amenity)}
+                          checked={filters.selectedAmenities.includes(amenity)}
                           onCheckedChange={(checked) => {
                             if (checked) {
-                              setSelectedAmenities([...selectedAmenities, amenity]);
+                              updateFilter('selectedAmenities', [...filters.selectedAmenities, amenity]);
                             } else {
-                              setSelectedAmenities(selectedAmenities.filter(a => a !== amenity));
+                              updateFilter('selectedAmenities', filters.selectedAmenities.filter(a => a !== amenity));
                             }
                           }}
                         />
@@ -378,9 +263,9 @@ const HotelListing = () => {
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
             {filteredHotels.length} Hotels Found
           </h1>
-          {searchQuery && (
+          {filters.searchQuery && (
             <p className="text-gray-600">
-              Showing results for "{searchQuery}"
+              Showing results for "{filters.searchQuery}"
               {checkIn && checkOut && (
                 <span> • {checkIn} to {checkOut}</span>
               )}
@@ -475,12 +360,7 @@ const HotelListing = () => {
             </p>
             <Button
               variant="outline"
-              onClick={() => {
-                setSearchQuery('');
-                setPriceRange([0, 10000]);
-                setSelectedRating('');
-                setSelectedAmenities([]);
-              }}
+              onClick={resetFilters}
             >
               Clear Filters
             </Button>

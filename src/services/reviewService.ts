@@ -16,40 +16,66 @@ export interface Review {
 
 export const reviewService = {
   async getHotelReviews(hotelId: string): Promise<Review[]> {
-    // First get the reviews
-    const { data: reviewsData, error: reviewsError } = await supabase
-      .from('reviews')
-      .select('id, user_id, hotel_id, rating, comment, helpful_count, created_at, images, booking_id')
-      .eq('hotel_id', hotelId)
-      .order('created_at', { ascending: false });
+    try {
+      // First get the reviews
+      const { data: reviewsData, error: reviewsError } = await supabase
+        .from('reviews')
+        .select('id, user_id, hotel_id, rating, comment, helpful_count, created_at, images, booking_id')
+        .eq('hotel_id', hotelId)
+        .order('created_at', { ascending: false });
 
-    if (reviewsError) {
-      throw new Error(`Failed to fetch reviews: ${reviewsError.message}`);
-    }
+      if (reviewsError) {
+        throw new Error(`Failed to fetch reviews: ${reviewsError.message}`);
+      }
 
-    // Get user profiles separately for each review
-    const reviewsWithUserNames: Review[] = [];
-    
-    for (const review of reviewsData || []) {
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('first_name, last_name')
-        .eq('id', review.user_id)
-        .single();
+      if (!reviewsData || reviewsData.length === 0) {
+        return [];
+      }
 
-      const userName = profileData 
-        ? `${profileData.first_name || ''} ${profileData.last_name || ''}`.trim()
-        : 'Guest User';
+      // Get all unique user IDs
+      const userIds = [...new Set(reviewsData.map(review => review.user_id))];
 
-      reviewsWithUserNames.push({
-        ...review,
-        helpful_count: review.helpful_count || 0,
-        images: review.images || [],
-        user_name: userName || 'Guest User'
+      // Fetch all profiles in one query
+      let profilesMap: { [key: string]: { first_name?: string; last_name?: string } } = {};
+      
+      try {
+        const { data: profilesData, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, first_name, last_name')
+          .in('id', userIds);
+
+        if (!profilesError && profilesData) {
+          profilesData.forEach(profile => {
+            profilesMap[profile.id] = {
+              first_name: profile.first_name,
+              last_name: profile.last_name
+            };
+          });
+        }
+      } catch (error) {
+        console.warn('Failed to fetch profiles, using default names:', error);
+      }
+
+      // Map reviews with user names
+      const reviewsWithUserNames: Review[] = reviewsData.map(review => {
+        const profile = profilesMap[review.user_id];
+        const userName = profile 
+          ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim()
+          : 'Guest User';
+
+        return {
+          ...review,
+          helpful_count: review.helpful_count || 0,
+          images: review.images || [],
+          user_name: userName || 'Guest User'
+        };
       });
-    }
 
-    return reviewsWithUserNames;
+      return reviewsWithUserNames;
+    } catch (error) {
+      console.error('Error fetching hotel reviews:', error);
+      throw error;
+    }
   },
 
   async checkExistingReview(hotelId: string): Promise<Review | null> {

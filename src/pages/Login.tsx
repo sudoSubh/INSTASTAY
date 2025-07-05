@@ -39,7 +39,6 @@ const Login = () => {
     e.preventDefault();
     console.log("Auth form submitted:", { isLogin, email: formData.email });
 
-    // Basic validation
     if (!formData.email.trim()) {
       toast({
         title: "Email Required",
@@ -67,7 +66,6 @@ const Login = () => {
         });
         navigate("/dashboard");
       } else {
-        // Additional validation for signup
         if (!formData.firstName.trim()) {
           toast({
             title: "First Name Required",
@@ -110,7 +108,6 @@ const Login = () => {
           description: "Please check your email to verify your account before signing in.",
         });
         
-        // Switch to login mode after successful signup
         setIsLogin(true);
         setFormData({
           ...formData,

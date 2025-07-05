@@ -3,54 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { Mic, MicOff } from "lucide-react";
 import Navigation from "./Navigation";
 import AIAssistant from './AIAssistant';
-import { useToast } from "@/hooks/use-toast";
+import { useVoiceSearch } from "@/hooks/useVoiceSearch";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
-  const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
-
-
-  // Speech recognition
-  useEffect(() => {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = false;
-      recognitionRef.current.lang = 'en-US';
-
-      recognitionRef.current.onstart = () => setIsListening(true);
-      recognitionRef.current.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        setSearchQuery(transcript);
-        setIsListening(false);
-        setTimeout(() => handleSearch(transcript), 500);
-      };
-      recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
-        setIsListening(false);
-        toast({
-          title: "Voice Recognition Error",
-          description: "Could not recognize speech. Please try again.",
-          variant: "destructive",
-        });
-      };
-      recognitionRef.current.onend = () => setIsListening(false);
-    }
-  }, []);
+  const { isListening, startVoiceSearch } = useVoiceSearch();
   useEffect(() => {
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
 
     if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
-      setShowHeader(false); // Scrolling down
+      setShowHeader(false);
     } else if (currentScrollY < lastScrollY.current - 10) {
-      setShowHeader(true); // Scrolling up a bit
+      setShowHeader(true);
     }
 
     lastScrollY.current = currentScrollY;
@@ -66,11 +34,6 @@ const Header = () => {
 
   const handleSearch = (query: string = searchQuery) => {
     if (!query.trim()) {
-      toast({
-        title: "Search Required",
-        description: "Please enter a search term",
-        variant: "destructive",
-      });
       return;
     }
     navigate(`/hotels?location=${encodeURIComponent(query.trim())}`);
@@ -78,33 +41,14 @@ const Header = () => {
   };
 
   const handleVoiceSearch = () => {
-    if (!recognitionRef.current) {
-      toast({
-        title: "Voice Search Not Supported",
-        description: "Your browser doesn't support voice recognition",
-        variant: "destructive",
-      });
-      return;
-    }
-    if (isListening) {
-      recognitionRef.current.stop();
-      setIsListening(false);
-    } else {
-      try {
-        recognitionRef.current.start();
-        toast({
-          title: "Listening...",
-          description: "Speak now to search for hotels",
-        });
-      } catch (error) {
-        console.error('Voice recognition start error:', error);
-        toast({
-          title: "Voice Search Error",
-          description: "Could not start voice recognition",
-          variant: "destructive",
-        });
-      }
-    }
+    startVoiceSearch((transcript) => {
+      const cleanedTranscript = transcript
+        .replace(/[.,!?;:]/g, '') // Remove punct
+        .replace(/\s+/g, ' ') // Fix spaces
+        .trim(); // Trim
+      setSearchQuery(cleanedTranscript);
+      setTimeout(() => handleSearch(cleanedTranscript), 500);
+    });
   };
 return (
   <>
@@ -155,15 +99,7 @@ return (
       </div>
     </div>
 
-    {/* Voice listening banner */}
-    {isListening && (
-      <div className="fixed top-16 sm:top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full shadow-md sm:shadow-lg z-50 animate-pulse">
-        <div className="flex items-center space-x-1 sm:space-x-2">
-          <Mic className="h-4 w-4 sm:h-5 sm:w-5" />
-          <span className="text-xs sm:text-sm font-medium">Listening... Speak now</span>
-        </div>
-      </div>
-    )}
+
 
   </header>
     <AIAssistant />

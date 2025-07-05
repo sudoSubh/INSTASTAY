@@ -117,18 +117,23 @@ export const favoritesService = {
     
     if (!user) return false;
 
-    const { data, error } = await supabase
-      .from('favorites')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('hotel_id', hotelId)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('favorites')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('hotel_id', hotelId)
+        .maybeSingle(); // Use maybeSingle instead of single to avoid errors
 
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error checking favorite status:', error);
+      if (error) {
+        console.error('Error checking favorite status:', error);
+        return false;
+      }
+
+      return !!data;
+    } catch (error) {
+      console.error('Exception checking favorite status:', error);
       return false;
     }
-
-    return !!data;
   }
 };

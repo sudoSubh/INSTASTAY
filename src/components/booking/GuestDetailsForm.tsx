@@ -6,10 +6,10 @@ import { Label } from "@/components/ui/label";
 
 interface GuestDetailsFormProps {
   bookingData: any;
-  setBookingData: (data: any) => void;
+  updateBookingData: (field: string, value: string) => void;
 }
 
-const GuestDetailsForm = ({ bookingData, setBookingData }: GuestDetailsFormProps) => {
+const GuestDetailsForm = ({ bookingData, updateBookingData }: GuestDetailsFormProps) => {
   return (
     <Card>
       <CardContent className="p-6">
@@ -25,7 +25,7 @@ const GuestDetailsForm = ({ bookingData, setBookingData }: GuestDetailsFormProps
               id="firstName"
               required
               value={bookingData.firstName}
-              onChange={(e) => setBookingData({...bookingData, firstName: e.target.value})}
+              onChange={(e) => updateBookingData('firstName', e.target.value)}
             />
           </div>
           <div>
@@ -34,7 +34,7 @@ const GuestDetailsForm = ({ bookingData, setBookingData }: GuestDetailsFormProps
               id="lastName"
               required
               value={bookingData.lastName}
-              onChange={(e) => setBookingData({...bookingData, lastName: e.target.value})}
+              onChange={(e) => updateBookingData('lastName', e.target.value)}
             />
           </div>
           <div>
@@ -44,7 +44,7 @@ const GuestDetailsForm = ({ bookingData, setBookingData }: GuestDetailsFormProps
               type="email"
               required
               value={bookingData.email}
-              onChange={(e) => setBookingData({...bookingData, email: e.target.value})}
+              onChange={(e) => updateBookingData('email', e.target.value)}
             />
           </div>
           <div>
@@ -53,7 +53,7 @@ const GuestDetailsForm = ({ bookingData, setBookingData }: GuestDetailsFormProps
               id="phone"
               required
               value={bookingData.phone}
-              onChange={(e) => setBookingData({...bookingData, phone: e.target.value})}
+              onChange={(e) => updateBookingData('phone', e.target.value)}
             />
           </div>
         </div>

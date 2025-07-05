@@ -12,6 +12,8 @@ import GuestDetailsForm from "@/components/booking/GuestDetailsForm";
 import BookingDetailsForm from "@/components/booking/BookingDetailsForm";
 import CouponCodeForm from "@/components/booking/CouponCodeForm";
 import BookingSummary from "@/components/booking/BookingSummary";
+import { useBookingFlow } from "@/hooks/useBookingFlow";
+import { formatPrice } from "@/utils/helpers";
 
 const BookingFlow = () => {
   const { hotelId } = useParams();
@@ -24,62 +26,26 @@ const BookingFlow = () => {
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const [paymentStep, setPaymentStep] = useState<'form' | 'payment' | 'success'>('form');
-  const [appliedCoupon, setAppliedCoupon] = useState("");
-  const [couponDiscount, setCouponDiscount] = useState(0);
 
-  // Initialize booking data with proper defaults
-  const [bookingData, setBookingData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    checkIn: searchParams.get("checkIn") || "",
-    checkOut: searchParams.get("checkOut") || "",
-    guests: searchParams.get("guests") || "1",
-    roomType: "deluxe"
-  });
-
-  // Update user details when user is loaded
-  useEffect(() => {
-    if (user) {
-      setBookingData(prev => ({
-        ...prev,
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        email: user.email || "",
-        phone: user.phone || ""
-      }));
-    }
-  }, [user]);
+    const { 
+    bookingData,
+    setBookingData,
+    updateBookingData,
+    appliedCoupon,
+    couponDiscount,
+    calculateTotal,
+    validateBookingData,
+    getOfferDiscount,
+    handleApplyCoupon,
+    handleRemoveCoupon
+  } = useBookingFlow(hotel);
 
   useEffect(() => {
     const offerCode = searchParams.get("offer");
     if (offerCode && !appliedCoupon) {
       handleApplyCoupon(offerCode, getOfferDiscount(offerCode));
     }
-  }, [searchParams, appliedCoupon]);
-
-  const getOfferDiscount = (code: string) => {
-    const offers: { [key: string]: number } = {
-      "WELCOME20": 20,
-      "WEEKEND35": 35,
-      "EARLY50": 50,
-      "FLASH60": 60,
-      "LUXURY25": 25,
-      "MONSOON40": 40
-    };
-    return offers[code] || 0;
-  };
-
-  const handleApplyCoupon = (code: string, discount: number) => {
-    setAppliedCoupon(code);
-    setCouponDiscount(discount);
-  };
-
-  const handleRemoveCoupon = () => {
-    setAppliedCoupon("");
-    setCouponDiscount(0);
-  };
+  }, [searchParams, appliedCoupon, handleApplyCoupon, getOfferDiscount]);
 
   useEffect(() => {
     const fetchHotelDetails = async () => {
@@ -129,51 +95,7 @@ const BookingFlow = () => {
     fetchHotelDetails();
   }, [hotelId, navigate, toast]);
 
-  const calculateTotal = () => {
-    if (!bookingData.checkIn || !bookingData.checkOut || !hotel) {
-      console.log('Missing data for calculation:', { checkIn: bookingData.checkIn, checkOut: bookingData.checkOut, hotel: !!hotel });
-      return 0;
-    }
-    
-    const checkIn = new Date(bookingData.checkIn);
-    const checkOut = new Date(bookingData.checkOut);
-    const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
-    
-    if (nights <= 0) {
-      console.log('Invalid nights calculation:', nights);
-      return 0;
-    }
-    
-    const basePrice = hotel.price * nights * parseInt(bookingData.guests);
-    const discountAmount = basePrice * (couponDiscount / 100);
-    const discountedPrice = basePrice - discountAmount;
-    const taxes = discountedPrice * 0.18; // 18% tax
-    const total = Math.round(discountedPrice + taxes);
-    
-    console.log('Price calculation:', { basePrice, discountAmount, taxes, total });
-    return total;
-  };
 
-  const validateBookingData = () => {
-    const errors = [];
-    
-    if (!bookingData.firstName.trim()) errors.push("First name is required");
-    if (!bookingData.lastName.trim()) errors.push("Last name is required");
-    if (!bookingData.email.trim()) errors.push("Email is required");
-    if (!bookingData.phone.trim()) errors.push("Phone number is required");
-    if (!bookingData.checkIn) errors.push("Check-in date is required");
-    if (!bookingData.checkOut) errors.push("Check-out date is required");
-    
-    if (bookingData.checkIn && bookingData.checkOut) {
-      const checkIn = new Date(bookingData.checkIn);
-      const checkOut = new Date(bookingData.checkOut);
-      if (checkOut <= checkIn) {
-        errors.push("Check-out date must be after check-in date");
-      }
-    }
-    
-    return errors;
-  };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -247,7 +169,6 @@ const BookingFlow = () => {
 
       console.log('Payment successful:', paymentResponse);
 
-      // Create booking after successful payment
       console.log('Creating booking in database');
       const booking = await supabaseBookingService.createBooking({
         hotelId: hotel.id,
@@ -375,8 +296,8 @@ const BookingFlow = () => {
           <div className="lg:col-span-2">
             {paymentStep === 'form' ? (
               <form onSubmit={handleFormSubmit} className="space-y-6">
-                <GuestDetailsForm bookingData={bookingData} setBookingData={setBookingData} />
-                <BookingDetailsForm bookingData={bookingData} setBookingData={setBookingData} />
+                <GuestDetailsForm bookingData={bookingData} updateBookingData={updateBookingData} />
+                <BookingDetailsForm bookingData={bookingData} updateBookingData={updateBookingData} />
                 <CouponCodeForm 
                   appliedCoupon={appliedCoupon}
                   onApplyCoupon={handleApplyCoupon}
@@ -390,7 +311,7 @@ const BookingFlow = () => {
                 >
                   <CreditCard className="h-5 w-5 mr-2" />
                   {calculateTotal() > 0 ? 
-                    `Proceed to Payment - ₹${calculateTotal().toLocaleString()}` : 
+                    `Proceed to Payment - ${formatPrice(calculateTotal())}` : 
                     'Please complete booking details'
                   }
                 </Button>
@@ -407,7 +328,7 @@ const BookingFlow = () => {
                   <div className="flex justify-between items-center p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border">
                     <span className="font-medium">Total Amount</span>
                     <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                      ₹{calculateTotal().toLocaleString()}
+                      {formatPrice(calculateTotal())}
                     </span>
                   </div>
                   <div className="text-sm text-gray-600 text-center">
@@ -430,7 +351,7 @@ const BookingFlow = () => {
                     ) : (
                       <>
                         <CreditCard className="h-5 w-5 mr-2" />
-                        Pay ₹{calculateTotal().toLocaleString()}
+                        Pay {formatPrice(calculateTotal())}
                       </>
                     )}
                   </Button>

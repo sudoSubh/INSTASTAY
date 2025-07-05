@@ -22,10 +22,10 @@ import { cn } from "@/lib/utils";
 
 interface BookingDetailsFormProps {
   bookingData: any;
-  setBookingData: (data: any) => void;
+  updateBookingData: (field: string, value: string) => void;
 }
 
-const BookingDetailsForm = ({ bookingData, setBookingData }: BookingDetailsFormProps) => {
+const BookingDetailsForm = ({ bookingData, updateBookingData }: BookingDetailsFormProps) => {
   const [isCheckInOpen, setIsCheckInOpen] = useState(false);
   const [isCheckOutOpen, setIsCheckOutOpen] = useState(false);
 
@@ -35,14 +35,12 @@ const BookingDetailsForm = ({ bookingData, setBookingData }: BookingDetailsFormP
   const handleCheckInSelect = (date: Date | undefined) => {
     if (date) {
       const formattedDate = format(date, 'yyyy-MM-dd');
-      let updatedData = {...bookingData, checkIn: formattedDate};
       
-      // If check-out is before or same as check-in, clear it
       if (checkOutDate && date >= checkOutDate) {
-        updatedData.checkOut = "";
+        updateBookingData('checkOut', '');
       }
       
-      setBookingData(updatedData);
+      updateBookingData('checkIn', formattedDate);
       setIsCheckInOpen(false);
     }
   };
@@ -50,16 +48,15 @@ const BookingDetailsForm = ({ bookingData, setBookingData }: BookingDetailsFormP
   const handleCheckOutSelect = (date: Date | undefined) => {
     if (date) {
       const formattedDate = format(date, 'yyyy-MM-dd');
-      setBookingData({...bookingData, checkOut: formattedDate});
+      updateBookingData('checkOut', formattedDate);
       setIsCheckOutOpen(false);
     }
   };
 
   const handleGuestsChange = (value: string) => {
-    setBookingData({...bookingData, guests: value});
+    updateBookingData('guests', value);
   };
 
-  // Ensure guests has a valid default value
   const guestsValue = bookingData.guests && bookingData.guests !== "" ? bookingData.guests : "1";
 
   return (
@@ -73,7 +70,7 @@ const BookingDetailsForm = ({ bookingData, setBookingData }: BookingDetailsFormP
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Check-in Date */}
+          {/* Check-in */}
           <div className="space-y-2">
             <Label htmlFor="checkIn" className="text-sm font-medium text-gray-700">
               Check-in Date
@@ -105,7 +102,7 @@ const BookingDetailsForm = ({ bookingData, setBookingData }: BookingDetailsFormP
             </Popover>
           </div>
 
-          {/* Check-out Date */}
+          {/* Check-out */}
           <div className="space-y-2">
             <Label htmlFor="checkOut" className="text-sm font-medium text-gray-700">
               Check-out Date

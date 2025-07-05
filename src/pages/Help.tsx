@@ -151,10 +151,9 @@ const Help = () => {
       title: "Starting AI Assistant",
       description: "Our AI assistant will help you with your queries.",
     });
-    // Scroll to top to make the AI assistant more visible
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    // You could also trigger the AI assistant to open if it has such functionality
+    // Trigger AI
     const aiButton = document.querySelector('[data-ai-assistant]');
     if (aiButton) {
       (aiButton as HTMLElement).click();
@@ -173,7 +172,7 @@ const Help = () => {
       
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">
-          {/* Hero Section */}
+          {/* Hero */}
           <div className="text-center mb-16">
             <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-indigo-100 to-purple-100 px-6 py-3 rounded-full mb-6">
               <HelpCircle className="w-5 h-5 text-indigo-600" />
@@ -199,7 +198,7 @@ const Help = () => {
             </div>
           </div>
 
-          {/* Contact Cards */}
+          {/* Contact */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <Card className="hover:shadow-2xl transition-all duration-500 border-0 bg-gradient-to-br from-white to-blue-50 cursor-pointer transform hover:-translate-y-2 group" onClick={handlePhoneCall}>
               <CardContent className="text-center p-10">
@@ -329,7 +328,7 @@ const Help = () => {
             )}
           </div>
 
-          {/* Support Hours */}
+          {/* Hours */}
           <Card className="bg-gradient-to-r from-indigo-50 via-purple-50 to-blue-50 border-0 shadow-xl">
             <CardContent className="p-12">
               <div className="flex items-center justify-center mb-8">
@@ -351,7 +350,7 @@ const Help = () => {
             </CardContent>
           </Card>
 
-          {/* Quick Actions */}
+          {/* Actions */}
           <div className="mt-16 text-center">
             <h3 className="text-2xl font-bold mb-8 text-gray-900">Quick Actions</h3>
             <div className="flex flex-wrap justify-center gap-6">

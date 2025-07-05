@@ -73,7 +73,6 @@ const WriteReviewModal = ({
         description: "Thank you for your review!",
       });
 
-      // Reset form
       setRating(0);
       setComment("");
       onReviewSubmitted();

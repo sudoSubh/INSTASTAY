@@ -18,7 +18,6 @@ const CouponCodeForm = ({ appliedCoupon, onApplyCoupon, onRemoveCoupon }: Coupon
   const [isApplying, setIsApplying] = useState(false);
   const { toast } = useToast();
 
-  // Mock coupon codes for demo
   const validCoupons = {
     "WELCOME20": { discount: 20, description: "Welcome discount 20% off" },
     "WEEKEND35": { discount: 35, description: "Weekend special 35% off" },
@@ -40,7 +39,6 @@ const CouponCodeForm = ({ appliedCoupon, onApplyCoupon, onRemoveCoupon }: Coupon
 
     setIsApplying(true);
     
-    // Simulate API call
     setTimeout(() => {
       const upperCode = couponCode.toUpperCase();
       const coupon = validCoupons[upperCode as keyof typeof validCoupons];

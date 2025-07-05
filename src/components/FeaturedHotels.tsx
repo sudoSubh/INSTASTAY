@@ -16,10 +16,9 @@ const FeaturedHotels = () => {
     const fetchFeaturedHotels = async () => {
       try {
         const hotels = await HotelService.getAllHotels();
-        setFeaturedHotels(hotels.slice(0, 3)); // Show top 3 hotels
+        setFeaturedHotels(hotels.slice(0, 3));
       } catch (error) {
         console.error('Error fetching featured hotels:', error);
-        // Fallback to mock data
         setFeaturedHotels([
           {
             id: "1",

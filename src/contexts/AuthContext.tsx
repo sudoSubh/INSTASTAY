@@ -29,14 +29,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session);
         setSession(session);
         
         if (session?.user) {
-          // Create or get user profile
           const userData = await createUserProfile(session.user);
           setUser(userData);
         } else {
@@ -46,7 +44,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     );
 
-    // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session?.user) {
@@ -123,7 +120,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) {
         console.error('Login error details:', error);
         
-        // Provide more specific error messages
         if (error.message.includes('Invalid login credentials')) {
           throw new Error('Invalid email or password. Please check your credentials and try again.');
         } else if (error.message.includes('Email not confirmed')) {
@@ -140,7 +136,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (error: any) {
       console.error('Login error:', error);
-      throw error; // Re-throw the error so the UI can handle it
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -167,7 +163,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) {
         console.error('Signup error details:', error);
         
-        // Provide more specific error messages
         if (error.message.includes('User already registered')) {
           throw new Error('An account with this email already exists. Please sign in instead.');
         } else if (error.message.includes('Password should be at least')) {
@@ -184,7 +179,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (error: any) {
       console.error('Signup error:', error);
-      throw error; // Re-throw the error so the UI can handle it
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -193,6 +188,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signInWithGoogle = async () => {
     setLoading(true);
     try {
+      console.log('Starting Google OAuth...');
+      console.log('Current origin:', window.location.origin);
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -206,7 +204,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (error: any) {
       console.error('Google signin error:', error);
-      throw error; // Re-throw the error so the UI can handle it
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -225,7 +223,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setSession(null);
     } catch (error: any) {
       console.error('Logout error:', error);
-      throw error; // Re-throw the error so the UI can handle it
+      throw error;
     } finally {
       setLoading(false);
     }

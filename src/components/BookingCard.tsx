@@ -201,7 +201,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onCancel }) => {
               )}
             </div>
 
-            {/* Cancellation Warning */}
+            {/* Cancel warning */}
             {!canCancel() && booking.status === 'confirmed' && (
               <div className="mt-4 text-sm text-amber-700 bg-gradient-to-r from-amber-50 to-yellow-50 px-4 py-3 rounded-2xl border border-amber-200 shadow-sm animate-fade-in">
                 <AlertTriangle className="h-4 w-4 inline mr-2" />
@@ -209,7 +209,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onCancel }) => {
               </div>
             )}
 
-            {/* Review Prompt for Completed Stays */}
+            {/* Review prompt */}
             {canWriteReview() && (
               <div className="mt-4 text-sm text-blue-700 bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3 rounded-2xl border border-blue-200 shadow-sm animate-fade-in">
                 <Star className="h-4 w-4 inline mr-2" />
