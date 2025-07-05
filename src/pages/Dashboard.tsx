@@ -7,11 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../contexts/AuthContext";
 import { useBookings } from "../hooks/useBookings";
-import { NotificationService } from "../services/notificationService";
 import Header from "@/components/Header";
 import BookingCard from "@/components/BookingCard";
-import UserAnalyticsDashboard from "@/components/dashboard/UserAnalyticsDashboard";
-import NotificationCenter from "@/components/notifications/NotificationCenter";
 import { useToast } from "@/hooks/use-toast";
 
 const Dashboard = () => {
@@ -20,9 +17,6 @@ const Dashboard = () => {
   const { bookings, loading, refetch, cancelBooking } = useBookings();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("bookings");
-  
-  // Get unread notification count
-  const unreadCount = user ? NotificationService.getUnreadCount(user.id) : 0;
 
   const upcomingBookings = bookings.filter(booking => 
     booking.status === 'confirmed' && new Date(booking.checkIn) > new Date()
@@ -105,21 +99,12 @@ const Dashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="bookings">
               My Bookings
               {bookings.length > 0 && (
                 <Badge variant="secondary" className="ml-2">
                   {bookings.length}
-                </Badge>
-              )}
-            </TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="notifications">
-              Notifications
-              {unreadCount > 0 && (
-                <Badge variant="destructive" className="ml-2">
-                  {unreadCount}
                 </Badge>
               )}
             </TabsTrigger>
@@ -249,15 +234,7 @@ const Dashboard = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="analytics" className="mt-6">
-            <UserAnalyticsDashboard />
-          </TabsContent>
 
-          <TabsContent value="notifications" className="mt-6">
-            <div className="max-w-4xl mx-auto">
-              <NotificationCenter />
-            </div>
-          </TabsContent>
 
           <TabsContent value="profile" className="mt-6">
             <Card>

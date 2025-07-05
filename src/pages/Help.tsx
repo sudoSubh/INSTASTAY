@@ -186,6 +186,19 @@ const Help = () => {
             </p>
           </div>
 
+          {/* Search */}
+          <div className="mb-16">
+            <div className="relative max-w-3xl mx-auto">
+              <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400" />
+              <Input
+                placeholder="Search for help articles, FAQs, booking assistance, or any topic..."
+                className="pl-16 py-6 text-lg border-2 border-gray-200 focus:border-indigo-500 rounded-2xl shadow-lg bg-white"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
+
           {/* Contact Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <Card className="hover:shadow-2xl transition-all duration-500 border-0 bg-gradient-to-br from-white to-blue-50 cursor-pointer transform hover:-translate-y-2 group" onClick={handlePhoneCall}>
@@ -260,18 +273,6 @@ const Help = () => {
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Frequently Asked Questions</h2>
             <div className="space-y-6 max-w-5xl mx-auto">
-              {/* Search */}
-          <div className="mb-16">
-            <div className="relative max-w-3xl mx-auto">
-              <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400" />
-              <Input
-                placeholder="Search for help articles, FAQs, booking assistance, or any topic..."
-                className="pl-16 py-6 text-lg border-2 border-gray-200 focus:border-indigo-500 rounded-2xl shadow-lg bg-white"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
               {filteredFAQs.map((faq) => (
                 <Card key={faq.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white">
                   <Collapsible 

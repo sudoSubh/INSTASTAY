@@ -174,21 +174,44 @@ export const apiService = {
 // export const supabase = createClient(supabaseUrl, supabaseKey)
 
 export async function checkOfferRedemption(userId: string, offerCode: string): Promise<boolean> {
-  const { data, error } = await supabase
-    .from('offer_redemptions')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('offer_code', offerCode)
-    .single();
-  return !!data;
+  try {
+    const { data, error } = await supabase
+      .from('offer_redemptions')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('offer_code', offerCode)
+      .maybeSingle(); // Use maybeSingle instead of single to avoid errors
+    
+    if (error) {
+      console.error('Error checking offer redemption:', error);
+      return false;
+    }
+    
+    return !!data;
+  } catch (error) {
+    console.error('Exception checking offer redemption:', error);
+    return false;
+  }
 }
 
 export async function redeemOffer(userId: string, offerCode: string): Promise<boolean> {
-  // Try to insert, if unique constraint fails, already redeemed
-  const { error } = await supabase
-    .from('offer_redemptions')
-    .insert([{ user_id: userId, offer_code: offerCode }]);
-  if (!error) return true;
-  if (error.code === '23505' || error.message.includes('duplicate')) return false;
-  throw error;
+  try {
+    const { error } = await supabase
+      .from('offer_redemptions')
+      .insert([{ user_id: userId, offer_code: offerCode }]);
+    
+    if (error) {
+      // Check if it's a duplicate key error (already redeemed)
+      if (error.code === '23505' || error.message.includes('duplicate')) {
+        return false; // Already redeemed
+      }
+      console.error('Error redeeming offer:', error);
+      throw error;
+    }
+    
+    return true; // Successfully redeemed
+  } catch (error) {
+    console.error('Exception redeeming offer:', error);
+    throw error;
+  }
 }
