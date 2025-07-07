@@ -147,16 +147,17 @@ const Help = () => {
   };
 
   const handleLiveChat = () => {
-    toast({
-      title: "Starting AI Assistant",
-      description: "Our AI assistant will help you with your queries.",
-    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    // Trigger AI
-    const aiButton = document.querySelector('[data-ai-assistant]');
+    const aiButton = document.querySelector('.bg-gradient-to-r.from-blue-500.to-purple-600');
     if (aiButton) {
       (aiButton as HTMLElement).click();
+      setTimeout(() => {
+        const maximizeButton = document.querySelector('.text-white.hover\\:bg-red-700.p-1[title="Expand"]');
+        if (maximizeButton) {
+          (maximizeButton as HTMLElement).click();
+        }
+      }, 500);
     }
   };
 
@@ -200,7 +201,7 @@ const Help = () => {
 
           {/* Contact */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <Card className="hover:shadow-2xl transition-all duration-500 border-0 bg-gradient-to-br from-white to-blue-50 cursor-pointer transform hover:-translate-y-2 group" onClick={handlePhoneCall}>
+            <Card className="hover:shadow-2xl transition-all duration-500 border-0 bg-gradient-to-br from-white to-green-50 cursor-pointer transform hover:-translate-y-2 group" onClick={handlePhoneCall}>
               <CardContent className="text-center p-10">
                 <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                   <Phone className="h-10 w-10 text-white" />
