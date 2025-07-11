@@ -62,10 +62,11 @@ export const useHotelFilters = (hotels: Hotel[]) => {
     );
 
     // Rating filter
-    if (filters.selectedRating) {
+    if (filters.selectedRating && filters.selectedRating !== "any") {
       const minRating = parseFloat(filters.selectedRating);
       filtered = filtered.filter(hotel => hotel.rating >= minRating);
     }
+
 
     // Amenities filter
     if (filters.selectedAmenities.length > 0) {
